@@ -22,14 +22,24 @@ func main() {
 					<a href="/"><button>Atras</button></a>
 					</html>`
 
+
+	notFound := `<!DOCTYPE html>
+					<html>
+					<head><title>About</title></head>
+					<body><h1>Esa URL no existe!</h1></body>
+					<a href="/"><button>Ir al inicio.</button></a>
+					</html>`
+
 //aca van los distintos paths/paginas
 	//inicio
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "text/html; charset=utf-8")
 		if r.URL.Path != "/" {
-			http.NotFound(w,r)
+			// http.NotFound(w,r)
+			fmt.Fprint(w, notFound)
 			return
 		}
-		w.Header().Set("Content-Type", "text/html; charset=utf-8")
+		
 		fmt.Fprint(w, htmlContent)
 	})
 
