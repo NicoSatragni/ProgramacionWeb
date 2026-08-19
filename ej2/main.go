@@ -19,7 +19,7 @@ const form =   `<!DOCTYPE html><html>
 				  <button type="submit">Login</button></form></body></html>`
 
 func main() {
-	http.HandleFunc("/", serveForm)
+	//http.HandleFunc("/", serveForm)
 
 	http.HandleFunc("/contacto", handleContacto)
 
@@ -35,17 +35,21 @@ func main() {
 }
 
 //es el /GET para obtener el formulario
-func serveForm(w http.ResponseWriter, r *http.Request) {
+/*func serveForm(w http.ResponseWriter, r *http.Request) {
 	if r.URL.Path != "/" || r.Method != http.MethodGet {
 		http.NotFound(w,r)
 		return
 	}
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
 	fmt.Fprint(w, form)
-}
+}*/
 
 func handleContacto(w http.ResponseWriter, r *http.Request) {
-	if r.Method != http.MethodPost {
+	if r.Method == http.MethodGet {
+		w.Header().Set("Content-Type", "text/html; charset=utf-8")
+		fmt.Fprint(w, form)
+		return
+	} else if r.Method != http.MethodPost {
 		http.Error(w,"Metodo no permitido", http.StatusMethodNotAllowed)
 		return
 	}
@@ -55,9 +59,16 @@ func handleContacto(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Error al parsear", http.StatusBadRequest)
 		return
 	}
+	
 	nombre := r.FormValue("nombre")
 	email := r.FormValue("email")
 	mnsj := r.FormValue("mensaje")
+
+	if nombre == "" || email == "" || mnsj == "" {
+		http.Error(w, "Error: No pueden haber campos vacíos." ,http.StatusBadRequest)
+		return
+	}
+
 	
 	rta := `<!DOCTYPE html><html><head>
 		    <title>Bienvenido</title></head> <body><h1>¡Hola, %s!</h1>
