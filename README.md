@@ -1,2 +1,3 @@
-# TP1
-Ejecutar con ./ejecutar.sh
+# TP2
+Ejecutar con **./ejecutar.sh**
+`if(x){}`
