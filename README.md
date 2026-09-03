@@ -9,7 +9,7 @@ Script de ejecución: _**`ejecutar.sh`**_
 > ./ejecutar.sh
 > ```
 
-***
+---
 
 ### Dependencias:
 - [Docker](https://www.docker.com/)
