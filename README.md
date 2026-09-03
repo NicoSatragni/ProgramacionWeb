@@ -1,5 +1,5 @@
 # TP2
-Ejecutar con **./ejecutar.sh**
+Script de ejecucion **`ejecutar.sh`**
 
 ```
 chmod +x ejecutar.sh 
