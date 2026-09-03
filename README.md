@@ -1,5 +1,5 @@
 # TP2
-Script de ejecucion **`ejecutar.sh`**
+Script de ejecucion **`_ejecutar.sh_`**
 
 
 > ```bash
