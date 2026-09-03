@@ -13,5 +13,5 @@ Script de ejecución: _**`ejecutar.sh`**_
 
 ___
 
-### Dependencias:
+## Dependencias:
 - [Docker](https://www.docker.com/)
