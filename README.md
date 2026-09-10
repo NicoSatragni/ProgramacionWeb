@@ -14,7 +14,7 @@ Script de ejecución: _**`ejecutar.sh`**_
 ## Dependencias:
 - [Docker](https://www.docker.com/)[^1]
 
-[^1]: Probado en versión: 29.7.2
+[^1]: Probado en versión: 29.7.2, podría no funcionar en versiones anteriores.
 
 
 
