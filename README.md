@@ -14,6 +14,7 @@ Script de ejecución: _**`ejecutar.sh`**_
 - [Docker](https://www.docker.com/)
 
 
+```mermaid
 
 erDiagram
 
@@ -41,3 +42,4 @@ erDiagram
     item_splits }o--|| shopping_items : "item_id -> id"
     item_splits }o--|| users : "user_id -> id"
     shopping_items }o--|| users : "paid_by_user_id -> id"
+```
