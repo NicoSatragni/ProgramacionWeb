@@ -33,18 +33,18 @@ erDiagram
 
     classDiagram
 direction BT
-class item_splits {
+item_splits {
    integer item_id
    integer user_id
 }
-class settlements {
+settlements {
    integer payer_id
    integer receiver_id
    numeric(10,2) amount
    timestamp with time zone created_at
    integer id
 }
-class shopping_items {
+shopping_items {
    varchar(255) title
    integer quantity
    numeric(10,2) price
@@ -53,7 +53,7 @@ class shopping_items {
    timestamp with time zone created_at
    integer id
 }
-class users {
+users {
    varchar(100) name
    timestamp with time zone created_at
    integer id
