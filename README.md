@@ -16,6 +16,7 @@ Script de ejecución: _**`ejecutar.sh`**_
 
 
 
+```mermaid
 
 classDiagram
 direction BT
@@ -41,3 +42,5 @@ class users {
 item_splits  -->  shopping_items : item_id:id
 item_splits  -->  users : user_id:id
 shopping_items  -->  users : paid_by_user_id:id
+
+```
