@@ -29,33 +29,32 @@ erDiagram
 ```
 
 ```mermaid
-    erDiagram
 
-    classDiagram
+classDiagram
 direction BT
-item_splits {
+class item_splits {
    integer item_id
    integer user_id
 }
-settlements {
+class settlements {
    integer payer_id
    integer receiver_id
-   numeric(10,2) amount
-   timestamp with time zone created_at
+   "numeric(10,2)" amount
+   "timestamp with time zone" created_at
    integer id
 }
-shopping_items {
-   varchar(255) title
+class shopping_items {
+   "varchar(255)" title
    integer quantity
-   numeric(10,2) price
+   "numeric(10,2)" price
    boolean is_purchased
    integer paid_by_user_id
-   timestamp with time zone created_at
+   "timestamp with time zone" created_at
    integer id
 }
-users {
-   varchar(100) name
-   timestamp with time zone created_at
+class users {
+   "varchar(100)" name
+   "timestamp with time zone" created_at
    integer id
 }
 
@@ -64,5 +63,6 @@ item_splits  -->  users : user_id:id
 settlements  -->  users : payer_id:id
 settlements  -->  users : receiver_id:id
 shopping_items  -->  users : paid_by_user_id:id
+
 
 ```
