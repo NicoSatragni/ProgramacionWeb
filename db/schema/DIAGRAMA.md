@@ -1,3 +1,4 @@
+
 ```mermaid
 
 erDiagram
@@ -58,11 +59,11 @@ class users {
    integer id
 }
 
-item_splits  -->  shopping_items : item_id:id
-item_splits  -->  users : user_id:id
-settlements  -->  users : payer_id:id
-settlements  -->  users : receiver_id:id
-shopping_items  -->  users : paid_by_user_id:id
+item_splits --> shopping_items : item_id
+item_splits --> users : user_id
+settlements --> users : payer_id
+settlements --> users : receiver_id
+shopping_items --> users : paid_by_user_id
 
 
 ```
