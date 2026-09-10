@@ -12,7 +12,7 @@ Script de ejecución: _**`ejecutar.sh`**_
 ## Diagrama de la Base de Datos (pPostgreSQL):
 - [Diagrama DER](./db/schema/DIAGRAMA.md)
 ## Dependencias:
-- [Docker](https://www.docker.com/)[^1]
+- [Docker](https://www.docker.com/) [^1]
 
 [^1]: Probado en versión: 29.7.2, podría no funcionar en versiones anteriores.
 
