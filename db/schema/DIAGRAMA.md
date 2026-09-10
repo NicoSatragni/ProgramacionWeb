@@ -30,40 +30,42 @@ erDiagram
 ```
 
 ```mermaid
+erDiagram
+    users {
+        integer id PK
+        varchar_100 name
+        timestamp_with_time_zone created_at
+    }
 
-classDiagram
-direction BT
-class item_splits {
-   integer item_id
-   integer user_id
-}
-class settlements {
-   integer payer_id
-   integer receiver_id
-   "numeric(10,2)" amount
-   "timestamp with time zone" created_at
-   integer id
-}
-class shopping_items {
-   "varchar(255)" title
-   integer quantity
-   "numeric(10,2)" price
-   boolean is_purchased
-   integer paid_by_user_id
-   "timestamp with time zone" created_at
-   integer id
-}
-class users {
-   "varchar(100)" name
-   "timestamp with time zone" created_at
-   integer id
-}
+    shopping_items {
+        integer id PK
+        varchar_255 title
+        integer quantity
+        numeric_10_2 price
+        boolean is_purchased
+        integer paid_by_user_id FK
+        timestamp_with_time_zone created_at
+    }
 
-item_splits --> shopping_items : item_id
-item_splits --> users : user_id
-settlements --> users : payer_id
-settlements --> users : receiver_id
-shopping_items --> users : paid_by_user_id
+    item_splits {
+        integer item_id FK
+        integer user_id FK
+    }
+
+    settlements {
+        integer id PK
+        integer payer_id FK
+        integer receiver_id FK
+        numeric_10_2 amount
+        timestamp_with_time_zone created_at
+    }
+
+    %% Relationships
+    users ||--o{ shopping_items : "pays for"
+    users ||--o{ item_splits : "owes split"
+    users ||--o{ settlements : "pays/receives"
+    shopping_items ||--o{ item_splits : "is split into"
+
 
 
 ```
