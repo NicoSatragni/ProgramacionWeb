@@ -48,8 +48,8 @@ erDiagram
     }
 
     item_splits {
-        integer item_id FK
-        integer user_id FK
+        integer item_id PK, FK
+        integer user_id PK, FK
     }
 
     settlements {
