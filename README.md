@@ -35,8 +35,8 @@ erDiagram
     }
 
     item_splits {
-        integer item_id PK FK
-        integer user_id PK FK
+        integer item_id PK, FK
+        integer user_id PK, FK
     }
 
     item_splits }o--|| shopping_items : "item_id -> id"
