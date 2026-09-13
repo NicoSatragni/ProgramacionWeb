@@ -14,7 +14,7 @@ var testQueries *Queries
 
 func TestMain(m *testing.M) {
 	host := os.Getenv("DB_HOST")
-	if host == "" || host == "database" {
+	if host == "" {
 		host = "localhost"
 	}
 	port := os.Getenv("DB_PORT")

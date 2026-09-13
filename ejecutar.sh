@@ -4,7 +4,7 @@ if [ ! -f .env ]; then
 fi
 echo -e "Verificamos Docker instalado..." 
 
-if ! command -v docker $>/dev/null; then
+if ! command -v docker >/dev/null 2>&1; then
   echo -e "\nError: No tienes Docker instalado! Saliendo del programa."
   exit 1
 fi

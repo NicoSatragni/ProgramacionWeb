@@ -1,17 +1,10 @@
-.PHONY: all test clean sqlc compile run
+.PHONY: all test clean sqlc compile
 
 # Target principal por defecto
 all: test
 
-# 0. Verificación previa de herramientas
-check-docker:
-	@if ! command -v docker >/dev/null 2>&1; then \
-		echo "Error: ¡No tienes Docker instalado! Saliendo del programa."; \
-		exit 1; \
-	fi
-
 # 1. Tareas previas: sqlc generate y verificación de compilación
-sqlc: check-docker
+sqlc:
 	@echo "==> Generando código Go con sqlc..."
 	@if command -v sqlc >/dev/null 2>&1; then \
 		sqlc generate; \
@@ -27,8 +20,12 @@ compile: sqlc
 		docker run --rm -v "$$(pwd):/app" -w /app golang:alpine go build ./...; \
 	fi
 
-# 2. Ejecución integral de los tests
-test: check-docker compile
+# 2. Ejecución integral de los tests:
+# - Limpieza previa total (contenedores y volúmenes)
+# - Levanta la base con healthcheck y --wait (espera reactiva de Docker, sin busy-wait)
+# - Ejecuta go test (nativamente si hay Go y DB en localhost, o 100% en Docker mediante test-runner)
+# - Garantiza limpieza posterior incluso si los tests fallan
+test: compile
 	@echo "==> [Paso 1] Limpiando contenedores y volúmenes previos..."
 	docker compose down -v --remove-orphans
 	@echo "==> [Paso 2 y 3] Levantando base y ejecutando tests en Docker..."
@@ -37,16 +34,6 @@ test: check-docker compile
 	echo "==> [Paso 4] Tareas posteriores: limpiando contenedores y volúmenes..."; \
 	docker compose down -v --remove-orphans; \
 	exit $$EXIT_CODE
-
-# 3. Ejecución interactiva del servidor
-run: check-docker
-	@read -p "¿Desea correr los tests además del servidor Go? (Y/n): " choice; \
-	if [ "$$choice" = "y" ] || [ "$$choice" = "Y" ] || [ -z "$$choice" ]; then \
-		echo "==> Ejecutando suite de tests primero..."; \
-		$(MAKE) test || exit 1; \
-	fi; \
-	echo "==> Levantando servidor web y base de datos con Docker Compose..."; \
-	docker compose up --build api
 
 # Limpieza manual si fuera necesaria
 clean:

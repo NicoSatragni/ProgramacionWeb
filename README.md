@@ -27,16 +27,18 @@ El proyecto incluye una suite de tests de integración que verifican las operaci
 Para correr los tests con el ciclo de vida completo:
 ```bash
 make test
+# O alternativamente:
+./test.sh
 ```
 
-### ¿Qué realiza `make test`?
+### ¿Qué realiza la automatización?
 1. **Tareas previas:**
-   - Regenera el código Go con `sqlc generate`.
+   - Regenera el código Go con `sqlc generate` (utilizando la imagen oficial `sqlc/sqlc` vía Docker si no está instalado en el host).
    - Verifica la compilación con `go build ./...`.
    - Limpia contenedores y volúmenes residuales (`docker compose down -v`).
-   - Levanta el contenedor de PostgreSQL con `docker compose up -d --wait database` (utiliza el `healthcheck` con `pg_isready` para una espera eficiente y sin *busy waiting* ni *race conditions*).
-2. **Ejecución:**
-   - Corre los tests con `go test -v ./...`.
+2. **Ejecución de tests en entorno aislado:**
+   - Levanta el servicio `database` (PostgreSQL con healthcheck nativo `pg_isready`, evitando *busy waiting* y *race conditions*).
+   - Ejecuta los tests dentro de un contenedor dedicado con Go (`test-runner`), garantizando portabilidad absoluta independientemente del entorno del anfitrión.
 3. **Tareas posteriores:**
    - Garantiza la limpieza eliminando contenedores y volúmenes (`docker compose down -v`), aun si los tests fallasen.
 
@@ -52,7 +54,8 @@ chmod +x ejecutar.sh
 
 ---
 
-## 📦 Dependencias
-- [Go](https://go.dev/) (1.26+)
+## 📦 Requisitos
 - [Docker](https://www.docker.com/) & Docker Compose
-- [sqlc](https://sqlc.dev/) (v1.31+)
+- [Make](https://www.gnu.org/software/make/) (o bash para ejecutar `./test.sh`)
+
+*(No es necesario tener Go ni `sqlc` instalados en el sistema anfitrión; todo el ciclo de vida, generación de código y suite de tests se ejecuta de forma aislada dentro de contenedores Docker).*
