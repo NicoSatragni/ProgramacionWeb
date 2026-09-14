@@ -59,8 +59,12 @@ chmod +x ejecutar.sh
 ---
 
 ## 📦 Requisitos
-- [Docker](https://www.docker.com/) & Docker Compose
-- [Docker-compose](link)
-- [Make](https://www.gnu.org/software/make/) (o bash para ejecutar `./test.sh`)
+- [Docker](https://www.docker.com/) [^1]
+- [Docker-compose](https://docs.docker.com/compose/install) [^2]
+- [Make](https://www.gnu.org/software/make/) [^3]
+
+[^1]: Testeado en Docker v29.7.2
+[^2]: Testeado en Docker-compose v5.5.1
+[^3]: Testeado en Make v4.4.1
 
 *(No es necesario tener Go ni `sqlc` instalados en el sistema anfitrión; todo el ciclo de vida, generación de código y suite de tests se ejecuta de forma aislada dentro de contenedores Docker).*
