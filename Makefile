@@ -55,7 +55,7 @@ run: check-docker env
 	fi; \
 	echo "==> Levantando servidor web y base de datos con Docker Compose..."; \
 	docker compose up --build api
-
+	docker compose down -v
 # Limpieza manual si fuera necesaria
 clean:
 	docker compose down -v
