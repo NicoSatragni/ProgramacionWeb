@@ -47,7 +47,7 @@ test: check-docker compile
 	exit $$EXIT_CODE
 
 # 3. Ejecución interactiva del servidor
-run: check-docker
+run: check-docker env
 	@read -p "¿Desea correr los tests además del servidor Go? (Y/n): " choice; \
 	if [ "$$choice" = "y" ] || [ "$$choice" = "Y" ] || [ -z "$$choice" ]; then \
 		echo "==> Ejecutando suite de tests primero..."; \
