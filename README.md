@@ -10,9 +10,9 @@ Aplicación web para la gestión de gastos y convivencia compartida.
 3. **`item_splits`**: Relación M:N entre artículos y usuarios para división dinámica de gastos.
 4. **`settlements`**: Registro de pagos y transferencias entre convivientes para saldar cuentas.
 
-- Diagrama Entidad-Relación: [`Ver Diagrama DER`](./db/schema/DIAGRAMA.md)
-- Esquema DDL: [`db/schema/schema.sql`](./db/schema/schema.sql)
-- Consultas SQL y Anotaciones sqlc: [`db/queries/`](./db/queries/)
+### - Diagrama Entidad-Relación: [`Ver Diagrama DER`](./db/schema/DIAGRAMA.md)
+### - Esquema DDL: [`db/schema/schema.sql`](./db/schema/schema.sql)
+### - Consultas SQL y Anotaciones sqlc: [`db/queries/`](./db/queries/)
 
 ---
 
