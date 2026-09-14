@@ -3,6 +3,14 @@
 # Target principal por defecto
 all: test
 
+# 00. Cambiamos el .env_produccion a .env
+env:
+	@if [ ! -f .env ]; then \
+		echo "==> No se encontró el archivo .env, copiando desde .env_production..."; \
+		cp .env_production .env; \
+	fi
+
+
 # 0. Verificación previa de herramientas
 check-docker:
 	@if ! command -v docker >/dev/null 2>&1; then \

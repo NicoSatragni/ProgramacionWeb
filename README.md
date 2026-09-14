@@ -24,12 +24,16 @@ La persistencia del dominio está implementada utilizando **PostgreSQL** y **sql
 
 El proyecto incluye una suite de tests de integración que verifican las operaciones CRUD y reglas de negocio sobre PostgreSQL usando el paquete estándar `testing` de Go.
 
-Para correr los tests con el ciclo de vida completo:
 ```bash
-make test
-# O alternativamente:
-./test.sh
-```
+# 1. Clonar directamente la rama tp2
+git clone -b tp2 [https://github.com/NicoSatragni/ProgramacionWeb.git](https://github.com/NicoSatragni/ProgramacionWeb.git)
+
+# 2. Entrar al directorio del repositorio
+cd ProgramacionWeb
+
+# 3. Ejecutar el proyecto mediante Make (te preguntará si deseás correr los tests primero)
+make run
+````
 
 ### ¿Qué realiza la automatización?
 1. **Tareas previas:**
@@ -56,6 +60,7 @@ chmod +x ejecutar.sh
 
 ## 📦 Requisitos
 - [Docker](https://www.docker.com/) & Docker Compose
+- [Docker-compose](link)
 - [Make](https://www.gnu.org/software/make/) (o bash para ejecutar `./test.sh`)
 
 *(No es necesario tener Go ni `sqlc` instalados en el sistema anfitrión; todo el ciclo de vida, generación de código y suite de tests se ejecuta de forma aislada dentro de contenedores Docker).*
