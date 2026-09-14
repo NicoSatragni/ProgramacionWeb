@@ -4,17 +4,13 @@ Aplicación web para la gestión de gastos y convivencia compartida.
 
 ---
 
-## Persistencia de Datos
-
-La persistencia del dominio está implementada utilizando **PostgreSQL** y **sqlc** para la generación de código Go con tipos seguros (*type-safe SQL*).
-
-### Estructura de la Base de Datos:
+## Estructura de la Base de Datos:
 1. **`users`**: Administra los integrantes de la vivienda.
 2. **`shopping_items`**: Lista e histórico de compras compartidas (artículos pendientes y comprados, montos y pagador).
 3. **`item_splits`**: Relación M:N entre artículos y usuarios para división dinámica de gastos.
 4. **`settlements`**: Registro de pagos y transferencias entre convivientes para saldar cuentas.
 
-- Diagrama Entidad-Relación: [Ver Diagrama DER](./db/schema/DIAGRAMA.md)
+- Diagrama Entidad-Relación: [`Ver Diagrama DER`](./db/schema/DIAGRAMA.md)
 - Esquema DDL: [`db/schema/schema.sql`](./db/schema/schema.sql)
 - Consultas SQL y Anotaciones sqlc: [`db/queries/`](./db/queries/)
 
