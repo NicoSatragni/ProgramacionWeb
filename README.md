@@ -26,7 +26,7 @@ El proyecto incluye una suite de tests de integración que verifican las operaci
 
 ```bash
 # 1. Clonar directamente la rama tp2
-git clone -b tp2 [https://github.com/NicoSatragni/ProgramacionWeb.git](https://github.com/NicoSatragni/ProgramacionWeb.git)
+git clone -b tp2 https://github.com/NicoSatragni/ProgramacionWeb.git
 
 # 2. Entrar al directorio del repositorio
 cd ProgramacionWeb
