@@ -30,12 +30,12 @@ compile: sqlc
 # 2. Ejecución integral de los tests
 test: check-docker compile
 	@echo "==> [Paso 1] Limpiando contenedores y volúmenes previos..."
-	docker compose down -v --remove-orphans
+	docker compose down -v
 	@echo "==> [Paso 2 y 3] Levantando base y ejecutando tests en Docker..."
 	@EXIT_CODE=0; \
 	docker compose --profile test run --rm --build test-runner || EXIT_CODE=$$?; \
 	echo "==> [Paso 4] Tareas posteriores: limpiando contenedores y volúmenes..."; \
-	docker compose down -v --remove-orphans; \
+	docker compose down -v; \
 	exit $$EXIT_CODE
 
 # 3. Ejecución interactiva del servidor
@@ -50,4 +50,4 @@ run: check-docker
 
 # Limpieza manual si fuera necesaria
 clean:
-	docker compose down -v --remove-orphans
+	docker compose down -v
