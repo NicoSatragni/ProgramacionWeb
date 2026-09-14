@@ -4,7 +4,7 @@ Aplicación web para la gestión de gastos y convivencia compartida.
 
 ---
 
-## 🏗️ Persistencia de Datos
+## Persistencia de Datos
 
 La persistencia del dominio está implementada utilizando **PostgreSQL** y **sqlc** para la generación de código Go con tipos seguros (*type-safe SQL*).
 
@@ -20,7 +20,7 @@ La persistencia del dominio está implementada utilizando **PostgreSQL** y **sql
 
 ---
 
-## 🧪 Ejecución de Tests Automatizados
+## Ejecución de Tests Automatizados
 
 El proyecto incluye una suite de tests de integración que verifican las operaciones CRUD y reglas de negocio sobre PostgreSQL usando el paquete estándar `testing` de Go.
 
@@ -44,11 +44,11 @@ make run
    - Levanta el servicio `database` (PostgreSQL con healthcheck nativo `pg_isready`, evitando *busy waiting* y *race conditions*).
    - Ejecuta los tests dentro de un contenedor dedicado con Go (`test-runner`), garantizando portabilidad absoluta independientemente del entorno del anfitrión.
 3. **Tareas posteriores:**
-   - Garantiza la limpieza eliminando contenedores y volúmenes (`docker compose down -v`), aun si los tests fallasen.
+   - Garantiza la limpieza eliminando contenedores y volúmenes (`docker compose down -v`), aun si los tests fallan.
 
 ---
 
-## 🚀 Ejecución de la Aplicación
+## Ejecutar exclusivamente la Aplicación sin tests
 
 Para levantar la aplicación en modo desarrollo:
 ```bash
@@ -58,7 +58,7 @@ chmod +x ejecutar.sh
 
 ---
 
-## 📦 Requisitos
+## Dependencias
 - [Docker](https://www.docker.com/) [^1]
 - [Docker-compose](https://docs.docker.com/compose/install) [^2]
 - [Make](https://www.gnu.org/software/make/) [^3]
