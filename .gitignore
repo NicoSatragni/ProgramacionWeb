@@ -1,2 +1,4 @@
 .agents/
 .env
+db/sqlc/*.go
+!db/sqlc/*_test.go
