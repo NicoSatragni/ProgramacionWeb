@@ -77,7 +77,6 @@ Para levantar la base de datos y la API para interactuar manualmente:
 ```bash
 make run
 ```
-*(O utilizando `./ejecutar.sh`)*.
 
 La API estará disponible en `http://localhost:8080/shopping-items`.
 
