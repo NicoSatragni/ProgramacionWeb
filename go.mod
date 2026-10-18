@@ -1,4 +1,4 @@
-module tp1
+module progweb
 
 go 1.26.6
 

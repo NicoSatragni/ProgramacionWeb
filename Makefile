@@ -1,4 +1,4 @@
-.PHONY: all test clean sqlc compile run
+.PHONY: all test test-api clean sqlc compile run
 
 # Target principal por defecto
 all: test
@@ -45,6 +45,32 @@ test: check-docker compile
 	echo "==> [Paso 4] Tareas posteriores: limpiando contenedores y volúmenes..."; \
 	docker compose down -v; \
 	exit $$EXIT_CODE
+
+	# 2b. Ejecución de pruebas de la API REST (Hurl)
+test-api: check-docker env compile
+	@echo "==> [Paso 1] Limpiando contenedores y volúmenes previos..."
+	docker compose down -v
+	@echo "==> [Paso 2] Levantando base de datos y servidor API..."
+	docker compose up -d --build api
+	@echo "==> [Paso 3] Esperando que la API esté lista para recibir peticiones..."
+	@for i in $$(seq 1 30); do \
+	    if curl -s http://localhost:8080/shopping-items >/dev/null 2>&1; then \
+	        echo "==> Servidor API listo."; \
+	        break; \
+	    fi; \
+	    sleep 1; \
+	done
+	@echo "==> [Paso 4] Ejecutando suite de pruebas HTTP con Hurl..."
+	@EXIT_CODE=0; \
+	if command -v hurl >/dev/null 2>&1; then \
+	    hurl --test requests.hurl || EXIT_CODE=$$?; \
+	else \
+	    docker run --rm -v "$$(pwd):/src" -w /src --network host ghcr.io/orange-opensource/hurl:latest --test requests.hurl || EXIT_CODE=$$?; \
+	fi; \
+	echo "==> [Paso 5] Tareas posteriores: limpiando contenedores y volúmenes..."; \
+	docker compose down -v; \
+	exit $$EXIT_CODE
+
 
 # 3. Ejecución interactiva del servidor
 run: check-docker env
