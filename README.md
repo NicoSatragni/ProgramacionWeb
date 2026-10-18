@@ -47,38 +47,46 @@ las buenas prácticas REST.
 ```
 ### ¿Qué realiza make test-api automáticamente?
 
-1. Tareas previas:
-  • Regenera el código con sqlc generate.
-  • Verifica la compilación con go build ./....
-  • Limpia contenedores y volúmenes residuales (docker compose down -v).
-2. Levantamiento y espera:
-  • Levanta PostgreSQL y espera a que el healthcheck nativo esté saludable.
-  • Levanta el contenedor de la API en Go y espera a que el puerto 8080 esté listo para recibir tráfico.
-3. Ejecución de pruebas (Hurl):
-  • Ejecuta requests.hurl. Si hurl no está instalado en el sistema anfitrión, lo ejecuta de forma transparente y aislada utilizando la imagen oficial de Docker (ghcr.io/orange-opensource/hurl:latest), garantizando portabilidad absoluta.
-4. Tareas posteriores:
-  • Garantiza la limpieza total eliminando contenedores y volúmenes (docker compose down -v), aun si alguna prueba falla.
+1. **Tareas previas:**
+   - Regenera el código con `sqlc generate`.
+   - Verifica la compilación con `go build ./...`.
+   - Limpia contenedores y volúmenes residuales (`docker compose down -v`).
+2. **Levantamiento y espera:**
+   - Levanta PostgreSQL y espera a que el *healthcheck* nativo esté saludable.
+   - Levanta el contenedor de la API en Go y espera a que el puerto `8080` esté listo para recibir tráfico.
+3. **Ejecución de pruebas (Hurl):**
+   - Ejecuta `requests.hurl` contra los endpoints de la API.
+   - Si `hurl` no está instalado en el sistema anfitrión, lo ejecuta de forma transparente y aislada utilizando la imagen oficial de Docker (`ghcr.io/orange-opensource/hurl:latest`), garantizando portabilidad absoluta.
+4. **Tareas posteriores:**
+   - Garantiza la limpieza total eliminando contenedores y volúmenes (`docker compose down -v`), aun si alguna prueba falla.
 
-──────
+---
+
 ## Ejecución de Tests Unitarios de Base de Datos (TP2)
 
-Para correr la suite de tests de persistencia generada con go test:
+Para correr la suite de tests de persistencia generada con `go test`:
 ```bash
- make test
-````
-──────
+make test
+```
+
+---
+
 ## Ejecutar el Servidor en Desarrollo
 
 Para levantar la base de datos y la API para interactuar manualmente:
 ```bash
 make run
-````
-La API estará disponible en http://localhost:8080/shopping-items.
-──────
+```
+*(O utilizando `./ejecutar.sh`)*.
+
+La API estará disponible en `http://localhost:8080/shopping-items`.
+
+---
+
 ## Dependencias
 
-• Docker https://www.docker.com/
-• Docker Compose https://docs.docker.com/compose/
-• Make https://www.gnu.org/software/make/
+- [Docker](https://www.docker.com/)
+- [Docker Compose](https://docs.docker.com/compose/)
+- [Make](https://www.gnu.org/software/make/)
 
-(No es necesario tener Go, sqlc ni hurl instalados en el sistema anfitrión; todo el ciclo de vida, compilación y suite de pruebas corre encapsulado dentro de contenedores Docker).
+*(No es necesario tener Go, `sqlc` ni `hurl` instalados en el sistema anfitrión; todo el ciclo de vida, compilación y suite de pruebas corre encapsulado dentro de contenedores Docker).*
