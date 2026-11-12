@@ -3,3 +3,5 @@
 db/sqlc/*.go
 !db/sqlc/*_test.go
 progweb
+PROJECT_CONTEXT.md
+

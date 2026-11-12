@@ -1,4 +1,4 @@
-.PHONY: all test test-api clean sqlc compile run
+.PHONY: all test test-api clean sqlc compile run run-test
 
 # Target principal por defecto
 all: test
@@ -74,13 +74,19 @@ test-api: check-docker env compile
 
 # 3. Ejecución interactiva del servidor
 run: check-docker env
-	@read -p "¿Desea correr los tests además del servidor Go? (Y/n): " choice; \
-	if [ "$$choice" = "y" ] || [ "$$choice" = "Y" ] || [ -z "$$choice" ]; then \
-		echo "==> Ejecutando suite de tests primero..."; \
-		$(MAKE) test || exit 1; \
-	fi; \
+	@printf "¿Desea correr los tests además del servidor Go? (Y/n): "; \
+	read -r choice < /dev/tty || choice="y"; \
+	case "$$choice" in \
+		[nN]*) \
+			echo "==> Saltando tests..."; \
+			;; \
+		*) \
+			echo "==> Ejecutando suite de tests primero..."; \
+			$(MAKE) test || exit 1; \
+			;; \
+	esac; \
 	echo "==> Levantando servidor web y base de datos con Docker Compose..."; \
-	docker compose up --build api
+	docker compose up --build api; \
 	docker compose down -v
 # Limpieza manual si fuera necesaria
 clean:
