@@ -1,305 +1,346 @@
 /* ==========================================================================
-   styles.css - Estilos para Compras Compartidas (TP4)
-   Uso de CSS Grid y Flexbox nativo, sin dependencias externas
+   Swiss SaaS UI Architecture (Stripe / Linear / Polaris Standard)
+   Capa de refinamiento visual sobre Pico.css para SSR en Go (TP5)
+   Zero JavaScript - 100% CSS Nativo
    ========================================================================== */
 
 :root {
-    --bg-color: #f1f5f9;
-    --card-bg: #ffffff;
-    --text-primary: #1e293b;
-    --text-secondary: #64748b;
-    --primary: #2563eb;
-    --primary-hover: #1d4ed8;
-    --primary-light: #eff6ff;
-    --danger: #dc2626;
-    --danger-hover: #b91c1c;
-    --danger-light: #fef2f2;
-    --success: #16a34a;
-    --border-color: #e2e8f0;
-    --border-radius: 10px;
-    --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
-    --shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.05);
-    --transition: all 0.2s ease-in-out;
+    /* Paleta Neutral Escandinava / Suiza (Zinc & Slate) */
+    --app-bg: #f8fafc;
+    --surface-card: #ffffff;
+    --border-subtle: #e2e8f0;
+    --border-hover: #cbd5e1;
+    
+    /* Jerarquía Tipográfica */
+    --text-primary: #0f172a;    /* Slate 900 (nunca negro puro) */
+    --text-secondary: #475569;  /* Slate 600 */
+    --text-muted: #64748b;      /* Slate 500 */
+    --text-tertiary: #94a3b8;   /* Slate 400 */
+    
+    /* Acción Primaria (Regla 60-30-10: solo 1 CTA primario por vista) */
+    --primary-action: #0f172a;
+    --primary-action-hover: #1e293b;
+    --primary-contrast: #ffffff;
+    
+    /* Semántica de Borrado / Destructivo (Quirúrgica, no chillona) */
+    --danger-subtle-bg: #fff1f2;
+    --danger-subtle-border: #fecdd3;
+    --danger-subtle-text: #be123c;
+    --danger-hover-bg: #ffe4e6;
+
+    /* Ritmo Espacial (Escala de 8pt) */
+    --space-2: 0.5rem;   /* 8px */
+    --space-3: 0.75rem;  /* 12px */
+    --space-4: 1rem;     /* 16px */
+    --space-6: 1.5rem;   /* 24px - padding interno estándar */
+    --space-8: 2rem;     /* 32px - separación entre secciones */
+    
+    /* Sombras imperceptibles (Shadow 2xs) */
+    --shadow-card: 0 1px 3px 0 rgba(15, 23, 42, 0.04), 0 1px 2px -1px rgba(15, 23, 42, 0.03);
+    --radius-card: 12px;
+    --radius-input: 8px;
+    --radius-badge: 6px;
 }
 
-/* Reset y estructura base */
-*, *::before, *::after {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-}
-
+/* 1. Lienzo de Fondo y Tipografía Global */
 body {
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-    background-color: var(--bg-color);
-    color: var(--text-primary);
+    background-color: var(--app-bg) !important;
+    color: var(--text-primary) !important;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif !important;
+    -webkit-font-smoothing: antialiased;
     line-height: 1.5;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
+    padding: 0;
+    margin: 0;
 }
 
-.container {
-    width: 100%;
-    max-width: 860px;
+/* Contenedor Maestro con Ritmo Espacial */
+.app-container {
+    max-width: 840px !important;
     margin: 0 auto;
-    padding: 0 1.5rem;
+    padding: var(--space-8) var(--space-4);
 }
 
-/* Header */
+/* 2. Header de la Aplicación */
 .app-header {
-    background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%);
-    color: #ffffff;
-    padding: 2.5rem 0 2rem;
-    box-shadow: var(--shadow);
-    text-align: center;
+    margin-bottom: var(--space-8);
+    border-bottom: 1px solid var(--border-subtle);
+    padding-bottom: var(--space-6);
 }
 
-.app-header h1 {
-    font-size: 2.2rem;
-    font-weight: 700;
-    letter-spacing: -0.025em;
-    margin-bottom: 0.35rem;
-}
-
-.app-header .subtitle {
-    font-size: 1.05rem;
-    opacity: 0.9;
-    font-weight: 400;
-}
-
-/* Contenido Principal con CSS Grid */
-.main-content {
-    flex: 1;
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 1.75rem;
-    padding-top: 2rem;
-    padding-bottom: 3rem;
-}
-
-/* Tarjetas (Cards) */
-.card {
-    background-color: var(--card-bg);
-    border-radius: var(--border-radius);
-    padding: 1.75rem;
-    box-shadow: var(--shadow);
-    border: 1px solid var(--border-color);
-}
-
-.card h2 {
-    font-size: 1.35rem;
+.brand-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.75rem;
     font-weight: 600;
-    color: var(--text-primary);
-    margin-bottom: 1.25rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--text-muted);
+    background: #f1f5f9;
+    border: 1px solid var(--border-subtle);
+    padding: 0.2rem 0.6rem;
+    border-radius: 9999px;
+    margin-bottom: 0.5rem;
 }
 
-/* Formulario con Flexbox y Grid */
-.item-form {
+.brand-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background-color: #10b981; /* Verde esmeralda sutil para indicar estado activo */
+}
+
+.app-title {
+    font-size: 1.75rem !important;
+    font-weight: 700 !important;
+    letter-spacing: -0.03em !important;
+    color: var(--text-primary) !important;
+    margin: 0 0 0.35rem 0 !important;
+}
+
+.app-subtitle {
+    font-size: 0.925rem;
+    color: var(--text-muted);
+    margin: 0;
+}
+
+/* 3. Tarjetas Elevadas (Layered Luminance) */
+.saas-card {
+    background-color: var(--surface-card) !important;
+    border: 1px solid var(--border-subtle) !important;
+    border-radius: var(--radius-card) !important;
+    box-shadow: var(--shadow-card) !important;
+    padding: var(--space-6) !important;
+    margin-bottom: var(--space-8) !important;
+    transition: border-color 0.15s ease;
+}
+
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--space-4);
+    padding-bottom: var(--space-3);
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.card-title {
+    font-size: 1rem !important;
+    font-weight: 600 !important;
+    letter-spacing: -0.015em;
+    color: var(--text-primary);
+    margin: 0 !important;
+}
+
+/* 4. Formulario Operativo y Controles */
+.form-grid {
     display: grid;
-    grid-template-columns: 2fr 1fr auto;
-    gap: 1rem;
+    grid-template-columns: 1fr auto;
+    gap: var(--space-4);
     align-items: end;
 }
 
-@media (max-width: 680px) {
-    .item-form {
-        grid-template-columns: 1fr;
+@media (min-width: 640px) {
+    .form-grid {
+        grid-template-columns: 3fr 1.2fr auto;
     }
 }
 
-.form-group {
-    display: flex;
-    flex-direction: column;
-    gap: 0.35rem;
+.field-label {
+    display: block;
+    font-size: 0.8125rem !important;
+    font-weight: 500 !important;
+    color: var(--text-secondary) !important;
+    margin-bottom: 0.35rem !important;
 }
 
-.form-group label {
-    font-size: 0.9rem;
-    font-weight: 600;
-    color: var(--text-secondary);
+.saas-input {
+    width: 100%;
+    font-size: 0.925rem !important;
+    color: var(--text-primary) !important;
+    background-color: #ffffff !important;
+    border: 1px solid var(--border-subtle) !important;
+    border-radius: var(--radius-input) !important;
+    padding: 0.6rem 0.85rem !important;
+    height: 42px !important;
+    box-sizing: border-box;
+    transition: all 0.15s ease-in-out;
 }
 
-.form-group input {
-    font-size: 1rem;
-    padding: 0.65rem 0.85rem;
-    border: 1.5px solid var(--border-color);
-    border-radius: 6px;
-    background-color: #fff;
-    color: var(--text-primary);
-    transition: var(--transition);
+.saas-input:focus {
+    outline: none !important;
+    border-color: var(--text-primary) !important;
+    box-shadow: 0 0 0 3px rgba(15, 23, 42, 0.08) !important;
 }
 
-.form-group input:focus {
-    outline: none;
-    border-color: var(--primary);
-    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
+.saas-input::placeholder {
+    color: var(--text-tertiary);
 }
 
-/* Botones */
-.btn {
+/* Botón Primario Único (Regla 10% Acento) */
+.btn-primary-action {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    font-size: 0.95rem;
-    font-weight: 600;
-    padding: 0.65rem 1.25rem;
-    border-radius: 6px;
-    border: none;
+    font-size: 0.9rem !important;
+    font-weight: 600 !important;
+    background-color: var(--primary-action) !important;
+    color: var(--primary-contrast) !important;
+    border: 1px solid var(--primary-action) !important;
+    border-radius: var(--radius-input) !important;
+    padding: 0 1.25rem !important;
+    height: 42px !important;
     cursor: pointer;
-    transition: var(--transition);
+    white-space: nowrap;
+    transition: all 0.15s ease;
 }
 
-.btn-primary {
-    background-color: var(--primary);
-    color: #ffffff;
-    height: 42px;
-}
-
-.btn-primary:hover:not(:disabled) {
-    background-color: var(--primary-hover);
-    box-shadow: var(--shadow);
-}
-
-.btn-primary:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
-}
-
-.btn-delete {
-    background-color: var(--danger-light);
-    color: var(--danger);
-    font-size: 0.85rem;
-    padding: 0.45rem 0.9rem;
-    border: 1px solid rgba(220, 38, 38, 0.2);
-}
-
-.btn-delete:hover:not(:disabled) {
-    background-color: var(--danger);
-    color: #ffffff;
-    border-color: var(--danger);
-}
-
-.btn-delete:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-}
-
-/* Feedback message */
-.feedback-message {
-    margin-top: 0.85rem;
-    font-size: 0.9rem;
-    min-height: 1.2rem;
-    font-weight: 500;
-}
-
-.feedback-message.success {
-    color: var(--success);
-}
-
-.feedback-message.error {
-    color: var(--danger);
-}
-
-/* Cabecera de la Lista */
-.list-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 1.25rem;
-    border-bottom: 1px solid var(--border-color);
-    padding-bottom: 0.75rem;
-}
-
-.list-header h2 {
-    margin-bottom: 0;
-}
-
-.badge {
-    background-color: var(--primary-light);
-    color: var(--primary);
-    font-size: 0.85rem;
-    font-weight: 700;
-    padding: 0.3rem 0.75rem;
-    border-radius: 20px;
-}
-
-/* Contenedor de la Lista y Elementos con Flexbox */
-.items-list {
-    list-style: none;
-    display: flex;
-    flex-direction: column;
-    gap: 0.75rem;
-}
-
-.item-card {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0.9rem 1.1rem;
-    background-color: #f8fafc;
-    border: 1px solid var(--border-color);
-    border-radius: 8px;
-    transition: var(--transition);
-}
-
-.item-card:hover {
-    background-color: #ffffff;
-    border-color: #cbd5e1;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+.btn-primary-action:hover {
+    background-color: var(--primary-action-hover) !important;
+    border-color: var(--primary-action-hover) !important;
     transform: translateY(-1px);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.08);
 }
 
-.item-info {
-    display: flex;
-    align-items: center;
-    gap: 0.85rem;
-    flex-wrap: wrap;
+/* 5. Tabla de Datos Escaneable (Swiss Grid) */
+.saas-table-container {
+    overflow-x: auto;
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-input);
 }
 
-.item-title {
-    font-size: 1.05rem;
+.saas-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 0 !important;
+    font-size: 0.9rem;
+}
+
+.saas-table th {
+    background-color: #f8fafc !important;
+    color: var(--text-muted) !important;
+    font-size: 0.75rem !important;
+    font-weight: 600 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.05em !important;
+    padding: 0.75rem 1.25rem !important;
+    border-bottom: 1px solid var(--border-subtle) !important;
+    border-top: none !important;
+    text-align: left;
+}
+
+.saas-table td {
+    padding: 0.85rem 1.25rem !important;
+    border-bottom: 1px solid var(--border-subtle) !important;
+    vertical-align: middle;
+    color: var(--text-secondary);
+}
+
+.saas-table tbody tr {
+    transition: background-color 0.15s ease;
+}
+
+.saas-table tbody tr:hover {
+    background-color: #f8fafc;
+}
+
+.saas-table tbody tr:last-child td {
+    border-bottom: none !important;
+}
+
+/* Alineaciones y Tipografía Numérica (Tabular Nums) */
+.item-name {
     font-weight: 600;
     color: var(--text-primary);
 }
 
-.item-qty {
-    background-color: #e2e8f0;
+.tabular-number {
+    font-variant-numeric: tabular-nums;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    font-size: 0.875rem;
+    background-color: #f1f5f9;
     color: var(--text-secondary);
-    font-size: 0.85rem;
-    font-weight: 700;
-    padding: 0.2rem 0.6rem;
-    border-radius: 12px;
-}
-
-/* Estados Vacíos y de Carga */
-.empty-state, .loading-state {
-    text-align: center;
-    padding: 2.5rem 1rem;
-    color: var(--text-secondary);
-}
-
-.empty-state p {
-    font-size: 1.05rem;
+    padding: 0.2rem 0.55rem;
+    border-radius: var(--radius-badge);
+    border: 1px solid #e2e8f0;
     font-weight: 600;
-    margin-bottom: 0.25rem;
 }
 
-.empty-state small {
-    font-size: 0.875rem;
+/* Botón de Borrado Destructivo Sutil (Ghost/Quirúrgico) */
+.btn-delete-ghost {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-size: 0.8125rem !important;
+    font-weight: 500 !important;
+    color: var(--text-muted) !important;
+    background: transparent !important;
+    border: 1px solid transparent !important;
+    border-radius: 6px !important;
+    padding: 0.35rem 0.7rem !important;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    margin: 0 !important;
 }
 
-.empty-state.error {
-    color: var(--danger);
+.btn-delete-ghost:hover {
+    color: var(--danger-subtle-text) !important;
+    background-color: var(--danger-subtle-bg) !important;
+    border-color: var(--danger-subtle-border) !important;
 }
 
-/* Footer */
-.app-footer {
-    background-color: #ffffff;
-    border-top: 1px solid var(--border-color);
-    padding: 1.5rem 0;
-    text-align: center;
+/* 6. Contador / Badge */
+.pill-counter {
+    display: inline-flex;
+    align-items: center;
+    font-variant-numeric: tabular-nums;
+    font-size: 0.75rem;
+    font-weight: 600;
     color: var(--text-secondary);
-    font-size: 0.875rem;
-    margin-top: auto;
+    background-color: #f1f5f9;
+    border: 1px solid var(--border-subtle);
+    padding: 0.2rem 0.65rem;
+    border-radius: 9999px;
+}
+
+/* 7. Empty State Refinado (Stripe Standard) */
+.empty-state-card {
+    text-align: center;
+    padding: 3.5rem 1.5rem;
+}
+
+.empty-icon-wrapper {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background-color: #f1f5f9;
+    border: 1px solid var(--border-subtle);
+    color: var(--text-muted);
+    margin-bottom: 1rem;
+}
+
+.empty-title {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: 0 0 0.35rem 0;
+}
+
+.empty-description {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin: 0;
+    max-width: 320px;
+    margin: 0 auto;
+}
+
+/* 8. Footer */
+.app-footer {
+    text-align: center;
+    padding: var(--space-6) 0;
+    color: var(--text-tertiary);
+    font-size: 0.8125rem;
 }
