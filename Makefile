@@ -1,15 +1,14 @@
-.PHONY: all test test-api clean sqlc compile run run-test
+.PHONY: all test test-api clean sqlc templ compile run run-test run-app
 
 # Target principal por defecto
 all: test
 
-# 00. Cambiamos el .env_produccion a .env
+# 00. Cambiamos el .env_production a .env si no existe
 env:
 	@if [ ! -f .env ]; then \
 		echo "==> No se encontró el archivo .env, copiando desde .env_production..."; \
 		cp .env_production .env; \
 	fi
-
 
 # 0. Verificación previa de herramientas
 check-docker:
@@ -18,16 +17,28 @@ check-docker:
 		exit 1; \
 	fi
 
-# 1. Tareas previas: sqlc generate y verificación de compilación
+# 1. Tareas previas de generación de código
 sqlc: check-docker
 	@echo "==> Generando código Go con sqlc..."
 	@if command -v sqlc >/dev/null 2>&1; then \
 		sqlc generate; \
+	elif [ -f "$$HOME/go/bin/sqlc" ]; then \
+		"$$HOME/go/bin/sqlc" generate; \
 	else \
 		docker run --rm -v "$$(pwd):/src" -w /src sqlc/sqlc generate; \
 	fi
 
-compile: sqlc
+templ:
+	@echo "==> Generando código Go con templ..."
+	@if command -v templ >/dev/null 2>&1; then \
+		templ generate; \
+	elif [ -f "$$HOME/go/bin/templ" ]; then \
+		"$$HOME/go/bin/templ" generate; \
+	else \
+		docker run --rm -v "$$(pwd):/src" -w /src ghcr.io/a-h/templ/templ:latest generate; \
+	fi
+
+compile: sqlc templ
 	@echo "==> Verificando compilación del proyecto..."
 	@if command -v go >/dev/null 2>&1; then \
 		go build ./...; \
@@ -35,7 +46,7 @@ compile: sqlc
 		docker run --rm -v "$$(pwd):/app" -w /app golang:alpine go build ./...; \
 	fi
 
-# 2. Ejecución integral de los tests
+# 2. Ejecución integral de los tests unitarios
 test: check-docker compile
 	@echo "==> [Paso 1] Limpiando contenedores y volúmenes previos..."
 	docker compose down -v
@@ -46,48 +57,25 @@ test: check-docker compile
 	docker compose down -v; \
 	exit $$EXIT_CODE
 
-	# 2b. Ejecución de pruebas de la API REST (Hurl)
-test-api: check-docker env compile
-	@echo "==> [Paso 1] Limpiando contenedores y volúmenes previos..."
+# 3. Pipeline de ejecución de la aplicación (TP5)
+# Cumple con todos los requisitos pedidos por la cátedra:
+# 1) Tareas previas: sqlc, templ, compilación, down -v, up con healthcheck
+# 2) Ejecución de la aplicación
+# 3) Tareas posteriores: limpieza de contenedores y volúmenes
+run-app: check-docker env sqlc templ compile
+	@echo "==> [Paso 1: Tareas previas] Limpiando contenedores y volúmenes previos..."
 	docker compose down -v
-	@echo "==> [Paso 2] Levantando base de datos y servidor API..."
-	docker compose up -d --build api
-	@echo "==> [Paso 3] Esperando que la API esté lista para recibir peticiones..."
-	@for i in $$(seq 1 30); do \
-	    if curl -s http://localhost:8080/shopping-items >/dev/null 2>&1; then \
-	        echo "==> Servidor API listo."; \
-	        break; \
-	    fi; \
-	    sleep 1; \
-	done
-	@echo "==> [Paso 4] Ejecutando suite de pruebas HTTP con Hurl..."
+	@echo "==> [Paso 2: Ejecutar la aplicación] Levantando base de datos y servidor SSR con Docker Compose..."
+	@echo "==> La aplicación estará disponible en: http://localhost:8080"
 	@EXIT_CODE=0; \
-	if command -v hurl >/dev/null 2>&1; then \
-	    hurl --test requests.hurl || EXIT_CODE=$$?; \
-	else \
-	    docker run --rm -v "$$(pwd):/src" -w /src --network host ghcr.io/orange-opensource/hurl:latest --test requests.hurl || EXIT_CODE=$$?; \
-	fi; \
-	echo "==> [Paso 5] Tareas posteriores: limpiando contenedores y volúmenes..."; \
+	docker compose up --build api || EXIT_CODE=$$?; \
+	echo "==> [Paso 3: Tareas posteriores] Limpiando contenedores y volúmenes al finalizar..."; \
 	docker compose down -v; \
 	exit $$EXIT_CODE
 
+# Alias para poder usar indistintamente 'make run' o 'make run-app'
+run: run-app
 
-# 3. Ejecución interactiva del servidor
-run: check-docker env
-	@printf "¿Desea correr los tests además del servidor Go? (Y/n): "; \
-	read -r choice < /dev/tty || choice="y"; \
-	case "$$choice" in \
-		[nN]*) \
-			echo "==> Saltando tests..."; \
-			;; \
-		*) \
-			echo "==> Ejecutando suite de tests primero..."; \
-			$(MAKE) test || exit 1; \
-			;; \
-	esac; \
-	echo "==> Levantando servidor web y base de datos con Docker Compose..."; \
-	docker compose up --build api; \
-	docker compose down -v
 # Limpieza manual si fuera necesaria
 clean:
 	docker compose down -v

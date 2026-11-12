@@ -1,0 +1,30 @@
+package views
+
+templ Layout(title string) {
+	<!DOCTYPE html>
+	<html lang="es" data-theme="light">
+		<head>
+			<meta charset="UTF-8"/>
+			<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+			<title>{ title }</title>
+			<!-- Pico.css base (consigna oficial de cátedra) -->
+			<link rel="stylesheet" href="/static/pico.min.css"/>
+			<!-- Estilos de diseño limpios y legibles -->
+			<link rel="stylesheet" href="/static/styles.css"/>
+		</head>
+		<body>
+			<div class="app-container">
+				<header class="app-header">
+					<h1 class="app-title">Compras Compartidas</h1>
+					<p class="app-subtitle">Gestión de artículos para la convivencia</p>
+				</header>
+				<main>
+					{ children... }
+				</main>
+				<footer class="app-footer">
+					<p>Programación Web (UNICEN) - Nicola Satragni</p>
+				</footer>
+			</div>
+		</body>
+	</html>
+}

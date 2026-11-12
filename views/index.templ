@@ -1,0 +1,10 @@
+package views
+
+import "progweb/db/sqlc"
+
+templ IndexPage(items []db.ShoppingItem) {
+	@Layout("Compras Compartidas | Lista de Artículos") {
+		@EntityForm()
+		@EntityList(items)
+	}
+}

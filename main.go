@@ -3,10 +3,12 @@ package main
 import (
 	"database/sql"
 	"fmt"
-	_ "github.com/lib/pq"
 	"log"
 	"net/http"
 	"os"
+
+	_ "github.com/lib/pq"
+
 	"progweb/db/sqlc"
 	"progweb/handlers"
 )
@@ -19,7 +21,6 @@ func getEnv(key, fallback string) string {
 }
 
 func main() {
-
 	dbHost := getEnv("DB_HOST", "localhost")
 	dbPort := getEnv("DB_PORT", "5432")
 	dbUser := getEnv("DB_USER", "nSatragni")
@@ -29,37 +30,39 @@ func main() {
 	dsn := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable", dbHost, dbPort, dbUser, dbPass, dbName)
 
 	conn, err := sql.Open("postgres", dsn)
-
 	if err != nil {
-		log.Fatalf("Error de ocnfiguracion de la BD: %v", err)
+		log.Fatalf("Error de configuración de la BD: %v", err)
 	}
 	defer conn.Close()
 
 	if err := conn.Ping(); err != nil {
 		log.Fatalf("Error conectando a la base de datos: %v", err)
 	}
-	log.Println("Conexion establecida con la BD PostgreSQL.")
+	log.Println("Conexión establecida con la BD PostgreSQL.")
 
 	queries := db.New(conn)
 
-	// Instanciar el handler pasándole las queries de sqlc
-	shoppingHandler := handlers.NewShoppingItemHandler(queries)
+	// Instanciar el handler web para Server-Side Rendering con templ
+	webHandler := handlers.NewWebHandler(queries)
 
-	// Crear nuestro enrutador (Multiplexor Go 1.22+)
+	// Enrutador HTTP (Go 1.22+)
 	mux := http.NewServeMux()
-	mux.HandleFunc("POST /shopping-items", shoppingHandler.Create)
-	mux.HandleFunc("GET /shopping-items", shoppingHandler.List)
-	mux.HandleFunc("GET /shopping-items/{id}", shoppingHandler.GetByID)
-	mux.HandleFunc("PUT /shopping-items/{id}", shoppingHandler.Update)
-	mux.HandleFunc("DELETE /shopping-items/{id}", shoppingHandler.Delete)
 
-	// Servir archivos estáticos del frontend (HTML, CSS, JS) desde ./static
+	// 1. Vista principal (GET /): renderiza IndexPage con templ
+	mux.HandleFunc("GET /", webHandler.Index)
+
+	// 2. Creación mediante formulario clásico (POST /shopping-items) con patrón PRG
+	mux.HandleFunc("POST /shopping-items", webHandler.CreateItem)
+
+	// 3. Borrado mediante formulario clásico (POST /shopping-items/{id}/delete)
+	mux.HandleFunc("POST /shopping-items/{id}/delete", webHandler.DeleteItem)
+
+	// 4. Archivos estáticos (hoja de estilos Pico.css en ./static)
 	fileServer := http.FileServer(http.Dir("./static"))
-	mux.Handle("/", fileServer)
+	mux.Handle("GET /static/", http.StripPrefix("/static/", fileServer))
 
-	// Iniciar el servidor
 	port := ":8080"
-	log.Printf("Servidor escuchando en http://localhost%s\n", port)
+	log.Printf("Servidor SSR escuchando en http://localhost%s\n", port)
 	err = http.ListenAndServe(port, mux)
 	if err != nil {
 		log.Fatalf("Error al iniciar el servidor: %s\n", err)

@@ -1,0 +1,42 @@
+package views
+
+templ EntityForm() {
+	<section class="saas-card" aria-labelledby="form-heading">
+		<div class="card-header">
+			<h2 id="form-heading" class="card-title">Agregar artículo</h2>
+		</div>
+		<form method="POST" action="/shopping-items" style="margin: 0;">
+			<div class="form-grid">
+				<div>
+					<label for="title" class="field-label">Nombre del artículo</label>
+					<input
+						type="text"
+						id="title"
+						name="title"
+						class="saas-input"
+						placeholder="Ej: Yerba, Leche, Huevos..."
+						required
+						autocomplete="off"
+					/>
+				</div>
+				<div>
+					<label for="quantity" class="field-label">Cantidad</label>
+					<input
+						type="number"
+						id="quantity"
+						name="quantity"
+						class="saas-input tabular-number"
+						min="1"
+						value="1"
+						required
+					/>
+				</div>
+				<div>
+					<button type="submit" class="btn-primary-action">
+						Agregar a la lista
+					</button>
+				</div>
+			</div>
+		</form>
+	</section>
+}
