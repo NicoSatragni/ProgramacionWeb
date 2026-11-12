@@ -79,7 +79,7 @@ make run
 
 ## TP5 - Renderizado del Lado del Servidor con Templ (SSR)
 
-En esta entrega se reemplazó el consumo de la API vía cliente JS por Server-Side Rendering (SSR) en Go utilizando `templ` y estilos con Pico.css, sin ningún archivo JavaScript (.js).
+En esta entrega se reemplazó el consumo de la API vía cliente JS por Server-Side Rendering (SSR) en Go utilizando `templ` y estilos con Pico.css.
 
 ### Componentes Templ (`views/`)
 - `views/layout.templ`: Estructura base HTML5 con enlace a Pico.css local (`static/pico.min.css`).
@@ -94,7 +94,7 @@ En esta entrega se reemplazó el consumo de la API vía cliente JS por Server-Si
 
 ### Ejecución de la Aplicación (TP5)
 
-Para ejecutar la aplicación completa requerida por la cátedra:
+Para ejecutar la aplicación completa:
 ```bash
 make run-app
 ```
